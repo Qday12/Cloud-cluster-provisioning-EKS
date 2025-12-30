@@ -66,25 +66,45 @@ resource "aws_iam_role_policy" "plan" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "ReadOnlyAccess"
+        Sid    = "EKSReadOnly"
+        Effect = "Allow"
+        Action = [
+          "eks:Describe*",
+          "eks:List*"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "EC2ReadOnly"
+        Effect = "Allow"
+        Action = [
+          "ec2:Describe*",
+          "ec2:Get*"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "IAMReadOnly"
+        Effect = "Allow"
+        Action = [
+          "iam:Get*",
+          "iam:List*"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "S3StateAccess"
         Effect = "Allow"
         Action = [
           "s3:Get*",
-          "s3:List*",
-          "cloudfront:Get*",
-          "cloudfront:List*",
-          "cloudfront:Describe*",
-          "wafv2:Get*",
-          "wafv2:List*",
-          "wafv2:Describe*",
-          "cloudwatch:Get*",
-          "cloudwatch:List*",
-          "cloudwatch:Describe*",
-          "logs:Get*",
-          "logs:List*",
-          "logs:Describe*",
-          "iam:Get*",
-          "iam:List*",
+          "s3:List*"
+        ]
+        Resource = "*"
+      },
+      {
+        Sid    = "DynamoDBStateLock"
+        Effect = "Allow"
+        Action = [
           "dynamodb:GetItem",
           "dynamodb:PutItem",
           "dynamodb:DeleteItem"
@@ -129,41 +149,48 @@ resource "aws_iam_role_policy" "apply" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid      = "S3FullAccess"
+        Sid      = "EKSFullAccess"
         Effect   = "Allow"
-        Action   = "s3:*"
+        Action   = "eks:*"
         Resource = "*"
       },
       {
-        Sid      = "CloudFrontFullAccess"
+        Sid      = "EC2FullAccess"
         Effect   = "Allow"
-        Action   = "cloudfront:*"
+        Action   = "ec2:*"
         Resource = "*"
       },
       {
-        Sid      = "WAFFullAccess"
-        Effect   = "Allow"
-        Action   = "wafv2:*"
-        Resource = "*"
-      },
-      {
-        Sid    = "CloudWatchFullAccess"
+        Sid    = "IAMFullAccess"
         Effect = "Allow"
         Action = [
-          "cloudwatch:*",
-          "logs:*"
-        ]
-        Resource = "*"
-      },
-      {
-        Sid    = "IAMLimited"
-        Effect = "Allow"
-        Action = [
-          "iam:CreateServiceLinkedRole",
+          "iam:CreateRole",
+          "iam:DeleteRole",
           "iam:GetRole",
           "iam:PassRole",
-          "iam:ListRoles"
+          "iam:ListRoles",
+          "iam:ListRolePolicies",
+          "iam:ListAttachedRolePolicies",
+          "iam:AttachRolePolicy",
+          "iam:DetachRolePolicy",
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:GetRolePolicy",
+          "iam:CreateInstanceProfile",
+          "iam:DeleteInstanceProfile",
+          "iam:GetInstanceProfile",
+          "iam:AddRoleToInstanceProfile",
+          "iam:RemoveRoleFromInstanceProfile",
+          "iam:ListInstanceProfilesForRole",
+          "iam:TagRole",
+          "iam:UntagRole"
         ]
+        Resource = "*"
+      },
+      {
+        Sid      = "S3StateAccess"
+        Effect   = "Allow"
+        Action   = "s3:*"
         Resource = "*"
       },
       {
