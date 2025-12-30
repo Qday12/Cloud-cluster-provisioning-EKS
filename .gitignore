@@ -1,4 +1,5 @@
 .AAA_local/
+.claude/
 
 # Terraform
 .terraform/
