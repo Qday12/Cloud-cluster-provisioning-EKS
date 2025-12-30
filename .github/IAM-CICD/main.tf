@@ -183,7 +183,9 @@ resource "aws_iam_role_policy" "apply" {
           "iam:RemoveRoleFromInstanceProfile",
           "iam:ListInstanceProfilesForRole",
           "iam:TagRole",
-          "iam:UntagRole"
+          "iam:UntagRole",
+          "iam:TagInstanceProfile",
+          "iam:UntagInstanceProfile"
         ]
         Resource = "*"
       },
