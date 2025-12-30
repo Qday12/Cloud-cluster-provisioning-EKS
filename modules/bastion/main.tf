@@ -131,6 +131,26 @@ resource "aws_iam_role_policy_attachment" "bastion_ssm" {
   role       = aws_iam_role.bastion.name
 }
 
+# EKS access policy for bastion
+resource "aws_iam_role_policy" "bastion_eks" {
+  name = "${var.cluster_name}-bastion-eks-policy"
+  role = aws_iam_role.bastion.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "eks:DescribeCluster",
+          "eks:ListClusters"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_iam_instance_profile" "bastion" {
   name = "${var.cluster_name}-bastion-profile"
   role = aws_iam_role.bastion.name
@@ -149,10 +169,16 @@ resource "aws_instance" "bastion" {
   user_data = <<-EOF
     #!/bin/bash
     yum update -y
-    yum install -y aws-cli
+    yum install -y unzip
 
-    # Install kubectl
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    # Install AWS CLI v2
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    ./aws/install --update
+    rm -rf aws awscliv2.zip
+
+    # Install kubectl v1.29 (compatible with EKS)
+    curl -LO "https://dl.k8s.io/release/v1.29.0/bin/linux/amd64/kubectl"
     chmod +x kubectl
     mv kubectl /usr/local/bin/
   EOF
