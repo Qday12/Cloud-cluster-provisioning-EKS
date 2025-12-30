@@ -1,2 +1,15 @@
-SETUP-PLAN.md
-Cloud-cluster-provisioning-EKS-Part 1.pdf
+.AAA_local/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
