@@ -21,3 +21,9 @@ variable "desired_capacity" {
   type        = number
   default     = 1
 }
+
+variable "bastion_instance_type" {
+  description = "Instance type for bastion host"
+  type        = string
+  default     = "t3.micro"
+}
