@@ -1,15 +1,9 @@
----
-# Nginx Test Pod for EKS Cluster Validation
-# This manifest creates a simple nginx pod and service to validate
-# that the EKS cluster scheduler and networking are working correctly.
-
 apiVersion: v1
 kind: Pod
 metadata:
   name: nginx-test
   labels:
     app: nginx-test
-    purpose: cluster-validation
 spec:
   containers:
     - name: nginx
@@ -37,9 +31,7 @@ spec:
           port: 80
         initialDelaySeconds: 10
         periodSeconds: 20
-
 ---
-# Service to expose the nginx pod within the cluster
 apiVersion: v1
 kind: Service
 metadata:
