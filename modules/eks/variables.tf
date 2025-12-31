@@ -14,3 +14,9 @@ variable "desired_capacity" {
   type        = number
   default     = 1
 }
+
+variable "admin_role_arns" {
+  description = "List of IAM role ARNs to grant EKS cluster admin access"
+  type        = list(string)
+  default     = []
+}
